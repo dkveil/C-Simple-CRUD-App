@@ -12,7 +12,12 @@ typedef struct {
     int age;
 } Record;
 
+void clearConsole() {
+
+}
+
 int loadRecords(const char* fileName, Record records[], int maxRecords) {
+
     FILE* fp = fopen(fileName, "r");
     if (!fp) {
         printf("Nie udalo sie otworzyc pliku %s\n", fileName);
@@ -50,6 +55,34 @@ int loadRecords(const char* fileName, Record records[], int maxRecords) {
     return count;
 }
 
+void listRecordsView(Record records[], int recordCount) {
+    printf("\n -- LISTA REKORDOW --\n\n");
+
+    for (int i = 0; i < recordCount; i++) {
+        printf("ID: %d | %s %s\n",
+               records[i].id,
+               records[i].firstName,
+               records[i].lastName);
+    }
+
+    int running = 1;
+
+    while (running) {
+        printf("\n1. Wroc do menu glownego\n");
+
+        int option;
+        scanf("%d", &option);
+
+        switch (option) {
+            case 1:
+                return;
+            default:
+                printf("Nieznana opcja. Sprobuj ponownie.\n");
+                break;
+        }
+    }
+}
+
 int main(void) {
     const char* fileName = "dane.csv";
     const int MAX_RECORDS = 100;
@@ -58,7 +91,36 @@ int main(void) {
     int recordCount = 0;
 
     recordCount = loadRecords(fileName, records, MAX_RECORDS);
-    printf("Wczytano %d rekordow z pliku %s\n", recordCount, fileName);
+
+    int running = 1;
+
+    while (running) {
+        clearConsole();
+
+        printf("Wczytano %d rekordow z pliku %s\n\n", recordCount, fileName);
+
+        printf("--- MENU ---\n\n");
+        printf("1. Lista rekordow\n");
+        printf("9. Wylacz program\n");
+        printf("\nWybierz opcje:\n");
+
+        int option;
+        scanf("%d", &option);
+
+        switch (option) {
+            case 1:
+                clearConsole();
+                listRecordsView(records, recordCount);
+                break;
+            case 9:
+                running = 0;
+                printf("Koniec programu.\n");
+                break;
+            default:
+                printf("Nieznana opcja.\n");
+        }
+    }
+
 
     return 0;
 }
